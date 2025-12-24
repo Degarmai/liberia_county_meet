@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liberia County Meet</title>
+<style>
+/* ===== RESET & BASE ===== */
+body, html {
+    margin:0; 
+    padding:0; 
+font-family:'Arial', sans-serif; 
+background:#ffffff; 
+color:#333;}
+a{text-decoration:none; 
+color:inherit;}
+h1{color:#0b5ed7; text-align:center;}
+h2{color:#0b5ed7;  
+margin-bottom:15px;}
+
+/* ===== HEADER ===== */
+header{
+  background:#1e1e2f;
+  color:#fff;
+  padding:15px 20px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+header h1{ font-size:1.5rem; }
+header p{ font-size:0.9rem; color:#bbb; }
+
+/* ===== NAVBAR ===== */
+nav{
+  background:#2b2b45;
+  display:flex; 
+  justify-content:center; 
+  gap:25px;
+  flex-wrap:wrap;
+}
+nav a{
+  padding:12px 15px; font-weight:bold; color:#fff; border-radius:5px; transition:0.3s;
+}
+nav a:hover, nav a.active{ background:#0b5ed7; }
+
+/* ===== CONTAINER ===== */
+.container{ max-width:1200px; margin:auto; padding:20px; }
+
+/* ===== PAGES ===== */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ===== SPORT TABS ===== */
+.sport-tabs{ display:flex; 
+gap:10px; 
+margin-bottom:15px; 
+flex-wrap:wrap; }
+.sport-tabs button{
+  padding:8px 15px; 
+  border:none; 
+  background:#ccc; 
+  cursor:pointer; 
+  font-weight:bold; 
+  border-radius:5px; 
+  transition:0.3s;
+}
+.sport-tabs button.active{ background:#0b5ed7; color:#fff; }
+
+/* ===== MATCH CARDS ===== */
+.match-card{
+  display:flex; justify-content:space-between; align-items:center;
+  background:#fff; padding:12px 15px; margin-bottom:10px;
+  border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+.match-card:hover{ background:#e6f0ff; }
+.match-card .teams{ font-weight:bold; font-size:1rem; }
+.match-card .score{ font-weight:bold; font-size:1.2rem; color:#0b5ed7; }
+.match-card .fixture-date{ color:#666; font-size:0.9rem; }
+
+/* ===== TABLES ===== */
+table{ width:100%; border-collapse:collapse; margin-bottom:20px; background:#fff; border-radius:6px; overflow:hidden;}
+th, td{ padding:12px; text-align:center; }
+th{ background:#0b5ed7; color:#fff; font-weight:bold;}
+tr:nth-child(even){ background:#f7f9fb; }
+tr.leader{ background:#e6f0ff; font-weight:bold; }
+
+/* ===== SLIDER ===== */
+.slider{ position:relative; overflow:hidden; border-radius:10px; margin-bottom:25px; }
+.slides{ display:flex; transition:0.6s; }
+.slides .slide{ min-width:100%; position:relative; }
+.slides img{ width:100%; object-fit:cover; height:300px; border-radius:10px; }
+.slider-btn{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; font-size:24px; padding:6px 10px; cursor:pointer; border-radius:5px;}
+.prev{left:10px;} .next{right:10px;}
+.caption{ position:absolute; bottom:0; width:100%; background:rgba(0,0,0,0.5); color:#fff; padding:8px; font-size:1rem; text-align:center; border-radius:0 0 10px 10px; }
+
+/* ===== VIDEO ===== */
+.video-section{ margin-top:20px; }
+video, iframe{ width:100%; border-radius:8px; }
+
+/* ===== FOOTER ===== */
+footer{ background:#1e1e2f; color:#bbb; text-align:center; padding:12px; margin-top:30px; font-size:0.9rem; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .match-card{ flex-direction:column; text-align:center; }
+  nav{ flex-wrap:wrap; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Liberia County Meet</h1>
+    <p>Football • Kickball • Basketball</p>
+  </div>
+</header>
+
+<nav>
+  <a class="active" onclick="showPage('home')">Home</a>
+  <a onclick="showPage('fixtures')">Fixtures</a>
+  <a onclick="showPage('scores')">Scores</a>
+  <a onclick="showPage('standings')">Standings</a>
+  <a onclick="showPage('history')">History</a>
+</nav>
+
+<div class="container">
+
+<!-- ===== HOME ===== -->
+<div id="home" class="page active">
+  <h2>Live Highlights</h2>
+  <div class="slider">
+    <div class="slides" id="slides">
+      <div class="slide">
+        <img src="images/football1.jpg">
+        <div class="caption">Football Final: Montserrado vs Bong</div>
+      </div>
+      <div class="slide">
+        <img src="images/kickball1.jpg">
+        <div class="caption">Kickball Semi: Grand Bassa vs Maryland</div>
+      </div>
+      <div class="slide">
+        <img src="images/basketball1.jpg">
+        <div class="caption">Basketball Championship: Nimba vs Bong</div>
+      </div>
+    </div>
+    <button class="slider-btn prev" onclick="prevSlide()">❮</button>
+    <button class="slider-btn next" onclick="nextSlide()">❯</button>
+  </div>
+
+  <div class="video-section">
+    <h2>Previous Games Video Highlights</h2>
+    <video controls>
+      <source src="videos/county_meet_highlights.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<!-- ===== FIXTURES ===== -->
+<div id="fixtures" class="page">
+  <h2>Upcoming Fixtures</h2>
+  <div class="sport-tabs">
+    <button class="active" onclick="showSport('fix','football')">Football</button>
+    <button onclick="showSport('fix','kickball')">Kickball</button>
+    <button onclick="showSport('fix','basketball')">Basketball</button>
+  </div>
+
+  <div id="fix-football" class="sport-section">
+    <div class="match-card"><div class="teams">Montserrado vs Bong</div><div class="fixture-date">Jan 10 | SKD Stadium</div></div>
+    <div class="match-card"><div class="teams">Nimba vs Lofa</div><div class="fixture-date">Jan 12 | SKD Stadium</div></div>
+  </div>
+
+  <div id="fix-kickball" class="sport-section" style="display:none;">
+    <div class="match-card"><div class="teams">Grand Bassa vs Maryland</div><div class="fixture-date">Jan 11 | SKD Stadium</div></div>
+  </div>
+
+  <div id="fix-basketball" class="sport-section" style="display:none;">
+    <div class="match-card"><div class="teams">Margibi vs Sinoe</div><div class="fixture-date">Jan 13 | SKD Stadium</div></div>
+  </div>
+</div>
+
+<!-- ===== SCORES ===== -->
+<div id="scores" class="page">
+  <h2>Live Scores</h2>
+  <div id="score-cards">
+    <div class="match-card" data-home="Montserrado" data-away="Bong" data-score="2-1">
+      <div class="teams">Montserrado vs Bong</div>
+      <div class="score">2 - 1</div>
+    </div>
+    <div class="match-card" data-home="Grand Bassa" data-away="Maryland" data-score="1-0">
+      <div class="teams">Grand Bassa vs Maryland</div>
+      <div class="score">1 - 0</div>
+    </div>
+    <div class="match-card" data-home="Margibi" data-away="Sinoe" data-score="78-65">
+      <div class="teams">Margibi vs Sinoe</div>
+      <div class="score">78 - 65</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STANDINGS ===== -->
+<div id="standings" class="page">
+  <h2>League Standings</h2>
+  <table>
+    <thead>
+      <tr><th>County</th><th>Played</th><th>Won</th><th>Lost</th><th>Points</th></tr>
+    </thead>
+    <tbody>
+      <tr class="leader"><td>Montserrado</td><td>2</td><td>2</td><td>0</td><td>6</td></tr>
+      <tr><td>Bong</td><td>2</td><td>1</td><td>1</td><td>3</td></tr>
+      <tr><td>Nimba</td><td>2</td><td>0</td><td>2</td><td>0</td></tr>
+    </tbody>
+  </table>
+</div>
+<!-- ===== HISTORY ===== -->
+<div id="history" class="page">
+<h1>Liberian National County Meet Football History</h1>
+<table class="infobox football">
+  <tbody><tr><td colspan="2" class="infobox-image"><span class="mw-default-size" typeof="mw:File/Frameless">
+    <a href="https://en.wikipedia.org/wiki/File:Nationa_County_Meets_trophies.jpg" class="mw-file-description">
+      <img src="images/trophies.jpg" decoding="async" width="250" height="376" class="mw-file-element" data-file-width="598" data-file-height="900"></a>
+    </span></td></tr></tbody></table>
+<p>The National County Sport Meet is the most watched football tournament across Liberia, with over 1.5 million football fans tuning in to listen over Radio, watching live from different Liberian online football sources, and also visiting the various stadiums in which the games can be played. <br>
+The tournment is annually organize by <b>Ministry of Youth & Sports</b>. It was founded in <strong>1956, 69 years ago.</strong><br>
+The current holders are <b><i>Lofa County.</i></b>
+
+</p>
+
+</section><div class="mw-heading mw-heading2 section-heading collapsible-heading open-block" tabindex="0" role="button" aria-controls="content-collapsible-block-0" aria-expanded="true"><span class="mf-icon mf-icon-expand mf-icon--small indicator mf-icon-rotate-flip"> </span><h2 id="Competition_format">Competition format</h2><span class="mw-editsection">
+<a role="button" href="https://en.wikipedia.org/w/index.php?title=Liberian_National_County_Meet&amp;action=edit&amp;section=1" title="Edit section: Competition format" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet ">
+    <span class="minerva-icon minerva-icon--edit"></span>
+</a>
+</span>
+</div><section class="mf-section-1 collapsible-block collapsible-block-js open-block" id="content-collapsible-block-0">
+<p>Beginning in January, the competition proceeds with a group stage of 15 teams, divided into four groups, with the first three groups carrying four teams and the last group carrying three. Each team plays every member of its group, and the team with the highest point and the runners-up in each group will then proceed to the next round while the other team will be eliminated.
+</p><p>For the next stage which is the quarter final, and onwards, the draw is entirely random, without association protection. The tournament is usually played within the period of one month; it only exceeds that when there are circumstances. 
+</p>
+</section><div class="mw-heading mw-heading2 section-heading collapsible-heading open-block" tabindex="0" role="button" aria-controls="content-collapsible-block-1" aria-expanded="true"><span class="mf-icon mf-icon-expand mf-icon--small indicator mf-icon-rotate-flip"> </span><h2 id="List_of_winners">List of winners</h2><span class="mw-editsection">
+<a role="button" href="https://en.wikipedia.org/w/index.php?title=Liberian_National_County_Meet&amp;action=edit&amp;section=2" title="Edit section: List of winners" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet ">
+    <span class="minerva-icon minerva-icon--edit"></span>
+</a></span>
+
+<ul><li>1956&nbsp;: <a href="https://en.wikipedia.org/wiki/Maryland_County" title="Maryland County">Maryland County</a></li>
+<li>1969&nbsp;: <a href="https://en.wikipedia.org/wiki/Grand_Cape_Mount_County" title="Grand Cape Mount County">Grand Cape Mount County</a></li>
+<li>1974&nbsp;: <a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a> </li>
+<li>1977&nbsp;: <a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a>  </li>
+<li>1978&nbsp;: <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a></li>
+<li>1979&nbsp;: <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a></li>
+<li>1985&nbsp;: <a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a></li>
+<li>1987: <a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a></li>
+<li>1989: <a href="https://en.wikipedia.org/wiki/Grand_Gedeh_County" title="Grand Gedeh County">Grand Gedeh County</a></li>
+<li>1990: <a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a></li>
+<li>2004&nbsp;: <a href="https://en.wikipedia.org/wiki/Gbarpolu_County" title="Gbarpolu County">Gbarpolu County</a></li>
+<li>2007&nbsp;: <a href="https://en.wikipedia.org/wiki/Rivercess_County" title="Rivercess County">Rivercess County</a></li>
+<li>2008&nbsp;: <a href="https://en.wikipedia.org/wiki/Bong_County" title="Bong County">Bong County</a></li>
+<li>2009&nbsp;: <a href="https://en.wikipedia.org/wiki/Bomi_County" title="Bomi County">Bomi County</a></li>
+<li>2010&nbsp;: <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>></li>
+<li>2011&nbsp;: <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a></li>
+<li>2012&nbsp;: <a href="https://en.wikipedia.org/wiki/Margibi_County" title="Margibi County">Margibi County</a></li>
+<li>2013&nbsp;: <a href="https://en.wikipedia.org/wiki/Grand_Cape_Mount_County" title="Grand Cape Mount County">Grand Cape Mount County</a></li>
+<li>2014: <a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a></li>
+<li>2015: N/A (*was cancelled due to the Ebola epidemic)</li>
+<li>2016: <a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a></li>
+<li>2017: <a href="https://en.wikipedia.org/wiki/Maryland_County" title="Maryland County">Maryland County</a></li>
+<li>2018&nbsp;: <a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a></li>
+<li>2019&nbsp;: <a href="https://en.wikipedia.org/wiki/Bomi_County" title="Bomi County">Bomi County</a></li>
+<li>2020&nbsp;: <a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County </a></li>
+<li>2021&nbsp;: <a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a></li>
+<li>2022&nbsp;: <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a></li>
+<li>2023&nbsp;: <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a></li>
+<li>2024&nbsp;: <a href="https://en.wikipedia.org/wiki/River_Gee_County" title="River Gee County">River Gee County</a></li>
+<li>2025&nbsp;: <a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a></li></ul>
+
+<table class="wikitable">
+<h2>Previous Finals results</h2>
+<tbody><tr>
+<th>seasons
+</th>
+<th>winners
+</th>
+<th>Scores
+</th>
+<th>Runners-up
+</th></tr>
+<tr>
+<td><i>1956</i>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Maryland_County" title="Maryland County">Maryland County</a>
+</td>
+<td><b>0–0</b> (Maryland won on <a href="https://en.wikipedia.org/wiki/Coin_flipping" title="Coin flipping">coin toss</a>)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td></tr>
+<tr>
+<td>1969
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Cape_Mount_County" title="Grand Cape Mount County">Grand Cape Mount County</a>
+</td>
+<td><b>3–1</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td></tr>
+<tr>
+<td>1974
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a>
+</td>
+<td>-
+</td>
+<td>-
+</td></tr>
+<tr>
+<td>1977
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a>
+</td>
+<td>-
+</td>
+<td>-
+</td></tr>
+<tr>
+<td>1978
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td>
+<td>-
+</td>
+<td>-
+</td></tr>
+<tr>
+<td>1979
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td>
+<td>-
+</td>
+<td>-
+</td></tr>
+<tr>
+<td>1985
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a>
+</td>
+<td><b>2–0</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a>
+</td></tr>
+<tr>
+<td>1987
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a>
+</td>
+<td><b>4–1</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Margibi_County" title="Margibi County">Margibi County</a>
+</td></tr>
+<tr>
+<td>1989
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Gedeh_County" title="Grand Gedeh County">Grand Gedeh County</a>
+</td>
+<td>(Grand Gedeh won on <a href="https://en.wikipedia.org/wiki/Coin_flipping" title="Coin flipping">coin toss</a>)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a>
+</td></tr>
+<tr>
+<td>1990
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a>
+</td>
+<td><b>1–0</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td></tr>
+<tr>
+<td>2004
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Gbarpolu_County" title="Gbarpolu County">Gbarpolu County</a>
+</td>
+<td><b>2–1</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a>
+</td></tr>
+<tr>
+<td>2007
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Rivercess_County" title="Rivercess County">Rivercess County</a>
+</td>
+<td><b>2–0</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Gedeh_County" title="Grand Gedeh County">Grand Gedeh County</a>
+</td></tr>
+<tr>
+<td>2008
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Bong_County" title="Bong County">Bong County</a>
+</td>
+<td><b>4–3</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Rivercess_County" title="Rivercess County">Rivercess County</a>
+</td></tr>
+<tr>
+<td>2009
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Bomi_County" title="Bomi County">Bomi County</a>
+</td>
+<td><b>5–2</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/River_Gee_County" title="River Gee County">River Gee County</a>
+</td></tr>
+<tr>
+<td>2010
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td>
+<td><b>2–0</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Gedeh_County" title="Grand Gedeh County">Grand Gedeh County</a>
+</td></tr>
+<tr>
+<td>2011
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td>
+<td><b>1–0</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Margibi_County" title="Margibi County">Margibi County</a>
+</td></tr>
+<tr>
+<td>2012
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Margibi_County" title="Margibi County">Margibi County</a>
+</td>
+<td><b>2–0</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td></tr>
+<tr>
+<td>2013
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Cape_Mount_County" title="Grand Cape Mount County">Grand Cape Mount County</a>
+</td>
+<td><b>1–1</b> (3–1 <a href="https://en.wikipedia.org/wiki/Penalty_shootout_(association_football)" class="mw-redirect" title="Penalty shootout (association football)">pen.</a>)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td></tr>
+<tr>
+<td>2014
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a>
+</td>
+<td><b>2–1</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td></tr>
+<tr>
+<td>2015
+</td>
+<td colspan="3">cancelled due to the <a href="https://en.wikipedia.org/wiki/Ebola_virus_epidemic_in_Liberia" title="Ebola virus epidemic in Liberia">Ebola virus epidemic in Liberia</a>
+</td></tr>
+<tr>
+<td>2016
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a>
+</td>
+<td><b>1–1</b> (3–1 <a href="https://en.wikipedia.org/wiki/Penalty_shootout_(association_football)" class="mw-redirect" title="Penalty shootout (association football)">pen.</a>)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td></tr>
+<tr>
+<td>2017
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td>
+<td><b>1–1</b> (3–1 <a href="https://en.wikipedia.org/wiki/Penalty_shootout_(association_football)" class="mw-redirect" title="Penalty shootout (association football)">pen.</a>)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Maryland_County" title="Maryland County">Maryland County</a>
+</td></tr>
+<tr>
+<td>2018
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td>
+<td><b>2–0</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Bong_County" title="Bong County">Bong County</a>
+</td></tr>
+<tr>
+<td>2019
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Bomi_County" title="Bomi County">Bomi County</a>
+</td>
+<td><b>1–1</b> (4–3 <a href="https://en.wikipedia.org/wiki/Penalty_shootout_(association_football)" class="mw-redirect" title="Penalty shootout (association football)">pen.</a>)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Margibi_County" title="Margibi County">Margibi County</a>
+</td></tr>
+<tr>
+<td>2020
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a>
+</td>
+<td>(Nimba County walked off the pitch)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td></tr>
+<tr>
+<td>2021
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a>
+</td>
+<td><b>3–1</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td></tr>
+<tr>
+<td>2022
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td>
+<td><b>2–1</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Gbarpolu_County" title="Gbarpolu County">Gbarpolu County</a>
+</td></tr>
+<tr>
+<td>2023
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td>
+<td><b>3–2</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a>
+</td></tr>
+<tr>
+<td>2024
+</td>
+<td><a href="https://en.wikipedia.org/wiki/River_Gee_County" title="River Gee County">River Gee County</a>
+</td>
+<td><b>2–2</b> (4–1 <a href="https://en.wikipedia.org/wiki/Penalty_shootout_(association_football)" class="mw-redirect" title="Penalty shootout (association football)">pen.</a>)
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a>
+</td></tr>
+<tr>
+<td>2025
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a>
+</td>
+<td><b>2–1</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Gedeh_County" title="Grand Gedeh County">Grand Gedeh County</a>
+</td></tr></tbody></table>
+<table class="wikitable">
+<h2>Highest Carrier
+</h2>
+<tbody><tr>
+<th>
+</th>
+<th>Teams
+</th>
+<th>Titles
+</th>
+<th>Runner ups
+</th></tr>
+<tr>
+<td>1
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a>
+</td>
+<td>6
+</td>
+<td>4
+</td></tr>
+<tr>
+<td><b>2</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a>
+</td>
+<td>5
+</td>
+<td>0
+</td></tr>
+<tr>
+<td><b>5</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Bassa_County" title="Grand Bassa County">Grand Bassa County</a>
+</td>
+<td>3
+</td>
+<td>2
+</td></tr>
+<tr>
+<td><b>4</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Cape_Mount_County" title="Grand Cape Mount County">Grand Cape Mount County</a>
+</td>
+<td>2
+</td>
+<td>0
+</td></tr>
+<tr>
+<td><b>5</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Bomi_County" title="Bomi County">Bomi County</a>
+</td>
+<td>2
+</td>
+<td>0
+</td></tr>
+<tr>
+<td><b>6</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a>
+</td>
+<td>2
+</td>
+<td>5
+</td></tr>
+<tr>
+<td><b>7</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Lofa_County" title="Lofa County">Lofa County</a>
+</td>
+<td>2
+</td>
+<td>3
+</td></tr>
+<tr>
+<td><b>8</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Maryland_County" title="Maryland County">Maryland County</a>
+</td>
+<td>1
+</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>9</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Grand_Gedeh_County" title="Grand Gedeh County">Grand Gedeh County</a>
+</td>
+<td>1
+</td>
+<td>3
+</td></tr>
+<tr>
+<td><b>10</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Gbarpolu_County" title="Gbarpolu County">Gbarpolu County</a>
+</td>
+<td>1
+</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>11</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Rivercess_County" title="Rivercess County">Rivercess County</a>
+</td>
+<td>1
+</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>12</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Bong_County" title="Bong County">Bong County</a>
+</td>
+<td>1
+</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>13</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/Margibi_County" title="Margibi County">Margibi County</a>
+</td>
+<td>1
+</td>
+<td>3
+</td></tr>
+<tr>
+<td><b>14</b>
+</td>
+<td><a href="https://en.wikipedia.org/wiki/River_Gee_County" title="River Gee County">River Gee County</a>
+</td>
+<td>1
+</td>
+<td>1
+</td></tr></tbody></table>
+
+</section><div class="mw-heading mw-heading2 section-heading collapsible-heading open-block" tabindex="0" role="button" aria-controls="content-collapsible-block-2" aria-expanded="true"><span class="mf-icon mf-icon-expand mf-icon--small indicator mf-icon-rotate-flip"> </span><h2 id="History">History</h2><span class="mw-editsection">
+<a role="button" href="https://en.wikipedia.org/w/index.php?title=Liberian_National_County_Meet&amp;action=edit&amp;section=3" title="Edit section: History" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet ">
+    <span class="minerva-icon minerva-icon--edit"></span>
+</a>
+</span>
+
+</div><section class="mf-section-3 collapsible-block collapsible-block-js open-block" id="content-collapsible-block-2">
+<p>In 1970, the Sasstown Territory, which is now part of Grand Kru County, emerged victorious in the county meet, while the Kru Coast Territory claimed the title in 1974. Grand Kru County has won the county meet a total of four times. Notable players from Sasstown during that period included Patrick Arthur, Anthony Wesseh, Tarpeh Roberts, Sylvester Red’ Weah, Michael Tarplah, Anthony Sayon Nagbe, Experience Tony, and Telemu.
+</p>
+</section><div class="mw-heading mw-heading2 section-heading collapsible-heading open-block" tabindex="0" role="button" aria-controls="content-collapsible-block-3" aria-expanded="true"><span class="mf-icon mf-icon-expand mf-icon--small indicator mf-icon-rotate-flip"> </span><h2 id="Records_and_Statistics">Records and Statistics</h2><span class="mw-editsection">
+<a role="button" href="https://en.wikipedia.org/w/index.php?title=Liberian_National_County_Meet&amp;action=edit&amp;section=4" title="Edit section: Records and Statistics" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet ">
+    <span class="minerva-icon minerva-icon--edit"></span>
+</a></span>
+
+</div><section class="mf-section-4 collapsible-block collapsible-block-js open-block" id="content-collapsible-block-3">
+<h3>Championship Records</h3>
+<ul><li><b>Most Titles:  <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a></b> holds the record for the most championships with six titles <b>(1978, 1979, 2010, 2011, 2022, 2023).</b></li>
+<li><b>Back-to-Back Wins:</b> <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a> is the only team to have won consecutive titles on three occasions.</li>
+<li><b>Undefeated finals:</b> <a href="https://en.wikipedia.org/wiki/Grand_Kru_County" title="Grand Kru County">Grand Kru County</a> County holds the unique distinction of never having lost a grand final appearance, with five championship wins.</li>
+<li><b>Most Finals Appearances:</b> <a href="https://en.wikipedia.org/wiki/Nimba_County" title="Nimba County">Nimba County</a> has appeared in the most grand finals, with 10 appearances</li>
+<li><b>Most Finals Lost:</b> <a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a> has lost the most finals, with five defeats.</li>
+<li><b>First Winner:</b> <a href="https://en.wikipedia.org/wiki/Maryland_County" title="Maryland County">Maryland County</a> was the first county to win the tournament in 1956, defeating <a href="https://en.wikipedia.org/wiki/Montserrado_County" title="Montserrado County">Montserrado County</a> on a coin toss.</li>
+<li><b>Never Won:</b> <a href="https://en.wikipedia.org/wiki/Sinoe_County" title="Sinoe County">Sinoe County</a> is the only county that has yet to win the championship.</li></ul>
+<h3>Player and tournament records</h3>
+<ul><li><b>Highest Scoring Final:</b> The 2009 final saw the most goals scored when <a href="https://en.wikipedia.org/wiki/Bomi_County" title="Bomi County">Bomi County</a> defeated <a href="https://en.wikipedia.org/wiki/River_Gee_County" title="River Gee County">River Gee County</a> 5-2, for a total of 7 goals.</li>
+<li><b>Scored in Three Finals:</b> <b>James Tarpeh</b> holds the unique record of being the first player to score in three different finals of the tournament.</li></ul>
+</section><div class="mw-heading mw-heading2 section-heading collapsible-heading" tabindex="0" role="button" aria-controls="content-collapsible-block-4" aria-expanded="false"><span class="mf-icon mf-icon-expand mf-icon--small indicator "> </span><h2 id="References">References</h2><span class="mw-editsection">
+<a role="button" href="https://en.wikipedia.org/w/index.php?title=Liberian_National_County_Meet&amp;action=edit&amp;section=5" title="Edit section: References" class="cdx-button cdx-button--size-large cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--icon-only cdx-button--weight-quiet ">
+    <span class="minerva-icon minerva-icon--edit"></span>
+</a></span>
+
+</div><section class="mf-section-6 collapsible-block collapsible-block-js open-block" id="content-collapsible-block-5">
+<ul><li><a rel="nofollow" class="external text" href="http://www.liberiafa.com/national-tournaments/mys-national-county-meet/">Liberia National County Meet</a></li>
+<li><a rel="nofollow" class="external text" href="https://web.archive.org/web/20060220014841/http://www.liberiansoccer.com/home.htm">Liberiansoccer.com - "the official home of Liberian football" - "FIFA approved" - current official standings provided</a></li>
+<li><a rel="nofollow" class="external text" href="https://en.wikipedia.org/wiki/Liberian_National_County_Meet">Wikipedia.org</a></li></ul>
+
+<div class="navbox-styles"></div>
+
+</div>
+
+
+
+<footer>&copy; 2025 F. Kolubah L. Wriyee</footer>
+
+<script>
+/* ===== PAGE NAVIGATION ===== */
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  document.querySelector(`nav a[onclick="showPage('${page}')"]`).classList.add('active');
+}
+
+/* ===== SPORT TABS ===== */
+function showSport(prefix,sport){
+  document.querySelectorAll('.sport-section').forEach(s=>s.style.display='none');
+  document.getElementById(prefix+'-'+sport).style.display='block';
+  document.querySelectorAll('.sport-tabs button').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+/* ===== SLIDER ===== */
+let index=0;
+const slides=document.getElementById('slides');
+function showSlide(){ slides.style.transform=`translateX(${-index*100}%)`; }
+function nextSlide(){ index=(index+1)%3; showSlide(); }
+function prevSlide(){ index=(index-1+3)%3; showSlide(); }
+setInterval(nextSlide,4000);
+
+/* ===== LIVE SCORES SIMULATION ===== */
+function simulateLiveScores(){
+  const cards=document.querySelectorAll('#score-cards .match-card');
+  cards.forEach(card=>{
+    let [home, away]=card.dataset.score.split('-').map(Number);
+    if(Math.random()>0.5){ home+=Math.floor(Math.random()*2); }
+    else{ away+=Math.floor(Math.random()*2); }
+    card.dataset.score=`${home}-${away}`;
+    card.querySelector('.score').textContent=`${home} - ${away}`;
+    card.style.background='#e6f0ff';
+    setTimeout(()=>{ card.style.background='#fff'; },800);
+  });
+}
+setInterval(simulateLiveScores,5000);
+</script>
+
+</body>
+</html>
